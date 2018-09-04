@@ -1,0 +1,105 @@
+
+<!doctype html>
+<html lang="en" ng-app="racerApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+   
+
+    <title>Multi-Runner Lap Timer Tracker</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/app.css" rel="stylesheet">
+    <script src="assets/js/angular.min.js"></script>
+    <script src="assets/js/app.js"></script>
+
+  </head>
+
+  <body>
+      <div id="container">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12 col-md-12">&nbsp;</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-12">
+              <div ng-controller="RacerListController as racerList">
+                <table class="table table-bordered">
+                <thead>
+                  <tr>
+                  <th>Name</th>
+                  <th>Lap Count</th>
+                  <th>Total Time</th>
+                  <th>Avergage Time</th>
+                  <th>Last Lap Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="racers in racerList.racers">
+                    <td> <button ng-click="racerList.calculate(racers.name, racerList.timeInMs)" class="btn btn-secondary">{{ racers.name }}</button></td>
+                    <td>{{ racers.lapCount }}</td>
+                    <td>
+                      {{ racers.totalTime | durationDate | date:'mm:ss.sss' }}
+                    </td>
+                    <td>{{ racers.averageTime | durationDate | date:'mm:ss.sss' }}</td>
+                    <td>{{ racers.lastLapTime | durationDate | date:'mm:ss.sss' }}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+              <table class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <th>1km Timer</th>
+                    <th>
+                      <form ng-submit="racerList.addRacer()">
+                      <input type="text" ng-model="racerList.racerName" />
+                      <button class="btn btn-primary" type="submit">Add Name</button>
+                      </form>
+                    </th>
+                    <th>
+                      <button ng-click="racerList.startRace()" class="btn btn-success">Start Race</button>&nbsp;
+                      <button ng-click="racerList.endRace()" class="btn btn-danger">End Race</button>
+                    </th>
+                    
+                    <th colspan="2">
+                      {{racerList.startDateTime | date:'d MMM y HH:mm:ss'}} 
+                      
+                      ({{ racerList.timeInMs | duration }})
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
+              <div id="result" ng-if="racerList.raceEnd">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Results</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><strong>{{ racerList.firstRunner.name }}</strong> had the highest lap count <strong>{{ racerList.firstRunner.lapCount }}</strong> and lowest overall time <strong>{{ racerList.firstRunner.totalTime | durationDate | date:'mm:ss.sss' }}</strong></td>
+                      </tr>
+                      <tr>
+                        <td><strong>{{ racerList.fastRunner.name }}</strong> completed lap <strong>{{ racerList.fastRunner.fastestLap }}</strong> in  <strong>{{ racerList.fastRunner.fastestLapTime | durationDate | date:'mm:ss.sss' }}</strong>  time which is the fastest among all.</td>
+                      </tr>
+                    </tbody>
+                </table>
+              </div>
+              </div>
+
+              
+
+            </div>
+            
+          </div>
+        </div>
+      </div>
+  </body>
+</html>
